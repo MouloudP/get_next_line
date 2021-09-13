@@ -6,7 +6,7 @@
 /*   By: ahamdoun <ahamdoun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/27 12:30:44 by ahamdoun          #+#    #+#             */
-/*   Updated: 2021/09/07 11:20:17 by ahamdoun         ###   ########.fr       */
+/*   Updated: 2021/09/13 11:42:19 by ahamdoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,4 +27,5 @@ char	*ft_strdup(const char *src);
 char	*ft_strjoin(const char *s1, const char *s2);
 char	*ft_strchr(const char *s, char c);
 char	*ft_strndup(const char *s, size_t n);
+size_t	ft_strlen(const char *s);
 #endif

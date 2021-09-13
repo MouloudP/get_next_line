@@ -6,26 +6,29 @@
 /*   By: ahamdoun <ahamdoun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/19 11:21:04 by ahamdoun          #+#    #+#             */
-/*   Updated: 2021/09/13 07:52:48 by ahamdoun         ###   ########.fr       */
+/*   Updated: 2021/09/13 16:37:25 by ahamdoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
+int count = 0;
+
 char 	*read_buffer(int fd, char **buffer)
 {
 	char	buf[BUFFER_SIZE + 1];
-	int		return_val = 1;
+	int		return_val = 0;
 	char	*next_line;
 	char	*curr_line;
 	char	*temp;
 	
-	curr_line = NULL;	
 	next_line = NULL;
-	temp = NULL;
-	while (return_val > 0)
+	count++;
+	printf("\n[%d] TRAITEMENT\n",count);
+
+	while ((return_val = read(fd, buf, BUFFER_SIZE)) > 0)
 	{
-		return_val = read(fd, buf, BUFFER_SIZE);
+	//	printf("[1] TRAITEMENT JE SUIS DANS LA BOUCLE");
 		buf[return_val] = '\0';
 		if (!*buffer)
 			*buffer = ft_strdup(buf);
@@ -36,7 +39,8 @@ char 	*read_buffer(int fd, char **buffer)
 			free(temp);
 		}
 		next_line = ft_strchr(*buffer, '\n');
-		if (next_line)
+		//printf("|[%d]||%s|||%s\n",count,next_line,*buffer);
+		if (next_line && *buffer)
 		{
 			curr_line = ft_strndup(*buffer, next_line + 1 - *buffer);
 			temp = *buffer;
@@ -44,7 +48,23 @@ char 	*read_buffer(int fd, char **buffer)
 			free(temp);
 			return (curr_line);
 		}
+
 	}
+	if (return_val == 0 && *buffer)
+	{
+		printf("gg");
+		/*next_line = ft_strchr(*buffer, '\n');
+		if (!(next_line))
+		{
+			curr_line = ft_strdup(*buffer);
+			*buffer = NULL;
+			free(*buffer);
+			return (curr_line);
+		}*/
+	}
+//	printf("[%d] TRAITEMENT SORTI DE BOUCLE bUFFER : %s  | NEXT LINE : %s | Return val : %d" ,count,*buffer, next_line, return_val);
+	if (*buffer)
+		free(*buffer);
 	return (NULL);
 }
 
@@ -60,4 +80,20 @@ char	*get_next_line(int fd)
 	if (line && line[0])
 		return (line);
 	return (NULL);
+}
+
+int main()
+{
+    int fd = open("./gnlTester/files/alternate_line_nl_with_nl", O_RDONLY);
+    int count = 1;
+    char *line = NULL;
+
+    while ((line = get_next_line(fd)) != NULL)
+    {
+        printf("\n==Ligne numero %d==\n|%s|", count, line);
+        count++;
+        free(line);
+    }
+    close(fd);
+	return (0);
 }
